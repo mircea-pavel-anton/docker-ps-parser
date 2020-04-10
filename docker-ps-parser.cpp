@@ -76,7 +76,7 @@ void print(std::vector<Container> _containers) {
     printf(OUTPUT_FORMAT, "Name", "Status", "Ports");
     std::cout << SEPARATOR << std::endl;
     char *mFormat = new char[100];
-    for (int i = 0; i < (int)_containers.size() - 1; i++) { 
+    for (int i = 0; i < (int)_containers.size(); i++) { 
         if ( _containers.at(i).getStatus().substr(0,6) == "Exited" ) strcpy(mFormat, OUTPUT_FORMAT_EXIT);
         else strcpy(mFormat, OUTPUT_FORMAT_UP);
         

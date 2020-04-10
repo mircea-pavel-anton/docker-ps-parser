@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <string>
+#include <string.h>
 #include <vector>
 #include <fstream>
 
@@ -75,7 +76,7 @@ void print(std::vector<Container> _containers) {
     printf(OUTPUT_FORMAT, "Name", "Status", "Ports");
     std::cout << SEPARATOR << std::endl;
     char *mFormat = new char[100];
-    for (int i = 0; i < _containers.size() - 1; i++) { 
+    for (int i = 0; i < (int)_containers.size() - 1; i++) { 
         if ( _containers.at(i).getStatus().substr(0,6) == "Exited" ) strcpy(mFormat, OUTPUT_FORMAT_EXIT);
         else strcpy(mFormat, OUTPUT_FORMAT_UP);
         
@@ -93,11 +94,10 @@ int main(void) {
     std::ifstream mFile(FILENAME);
     std::string mLine;
     std::vector<Container> mContainers;
-    bool mHasIndexes = false;
     int mIndexes[7] = {0,0,0,0,0,0,0};
 
     while (std::getline(mFile, mLine)) {
-        if (mHasIndexes) {
+        if (mIndexes[6] != 0) {
             std::string mID = trim ( mLine.substr(mIndexes[0], mIndexes[1] - mIndexes[0] ) );
             std::string mImage = trim ( mLine.substr(mIndexes[1], mIndexes[2] - mIndexes[1] ) );
             std::string mCommand = trim ( mLine.substr(mIndexes[2], mIndexes[3] - mIndexes[2] ) );
@@ -106,13 +106,13 @@ int main(void) {
             std::string mPorts = trim ( mLine.substr(mIndexes[5], mIndexes[6] - mIndexes[5] ) );
             std::string mName = trim ( mLine.substr(mIndexes[6]) );
 
+            //std::cout << mID << std::endl << mImage << std::endl << mCommand << std::endl << mCreated << std::endl << mStatus << std::endl << mName << std::endl << mPorts << std::endl << std::endl;
             mContainers.push_back(Container(mID, mImage, mCommand, mCreated, mStatus, mPorts, mName));
         } else {
-            mIndexes[0] = 0;
-            int mSpaces = 0;
-            int mCount = 1;
+            int mSpaces = 0; // counts the number of continuous spaces
+            int mCount = 1; // keeps track of the position in the mIndexes vector
 
-            for (int i = 0; i < mLine.size(); i++) {
+            for (int i = 0; i < (int)mLine.size(); i++) {
                 if (mLine.at(i) == ' ') mSpaces++;
                 else mSpaces = 0;
 
@@ -121,8 +121,6 @@ int main(void) {
                     mIndexes[mCount++] = i;
                 }
             }
-            for (int i = 0; i < 7; i++) std::cout << mIndexes[i] << " ";
-            std::cout << std::endl;
         }
     }
 

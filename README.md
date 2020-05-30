@@ -45,3 +45,4 @@ function dps {
         /usr/local/src/docker-ps-parser/dps
 }
 ```
+5. Simply type `dps` and enjoy your pretty looking table

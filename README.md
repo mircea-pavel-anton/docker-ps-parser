@@ -46,3 +46,13 @@ function dps {
 }
 ```
 5. Simply type `dps` and enjoy your pretty looking table
+
+<br>
+
+## Feedback, suggestions and help
+
+For feedback, suggestions, bug reports etc., feel free to e-mail me at 'mike.anth99@gmail.com'.
+
+---
+
+_a project by Mircea-Pavel Anton (Mike Anthony)_

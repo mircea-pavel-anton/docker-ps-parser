@@ -16,19 +16,6 @@ Well look no further! Docker-ps-parser is here to save your day. This program wi
 
 <img width="596" alt="dps_example" src="https://user-images.githubusercontent.com/28601784/83330219-4be03380-a296-11ea-9085-316f8c30e77d.png">
 
-
-## How to use
-1. Clone the repo:
-``` 
-git clone https://github.com/mikeanth-dvlp/docker-ps-parser.git 
-```
-2. CD into the downloaded directory: `cd docker-ps-parser`
-3. Run `make`
-4. Use `./dps` for a more structured output: 
-```
-docker ps -a --no-trunc > ./input.txt ; ./dps
-```
-
 <br>
 
 ## How to set up:

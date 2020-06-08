@@ -5,8 +5,10 @@
 #include <vector>
 #include <fstream>
 #include <array>
+#include <memory>
+#include <sstream>
 
-const char *COMMAND = "docker ps --format '{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}'";
+const char *COMMAND = "docker ps -a --format '{{.ID}}\t{{.Image}}\t{{.Command}}\t{{.RunningFor}}\t{{.Status}}\t{{.Ports}}\t{{.Names}}'";
 
 class Container {
 	private:
@@ -21,8 +23,8 @@ class Container {
 	public:
 		Container(void) { }
 		Container(std::string _id, std::string _image, std::string _command, std::string _created, std::string _status, std::string _ports, std::string _name) {
-			ID = _id; Image = _image; Command = _command; Created = _created; Status = _status; Name = _name; 
-		
+			ID = _id; Image = _image; Command = _command; Created = _created; Status = _status; Name = _name;
+
 			std::string mAux = "";
 			for (int j = 0; j < (int)(_ports.size()); j++ ) {
 				if (_ports[j] == ',') {
@@ -53,7 +55,18 @@ class Container {
 		void setCommand(std::string _command) { Command = _command; }
 		void setCreated(std::string _created) { Created = _created; }
 		void setStatus(std::string _status) { Status = _status; }
-		void setPorts(std::vector<std::string> _ports) { Ports = _ports; }
+		void setPorts(std::string _ports) {
+			std::string mAux = "";
+			for (int j = 0; j < (int)(_ports.size()); j++ ) {
+				if (_ports[j] == ',') {
+					addPort(mAux);
+					mAux = "";
+					while (_ports[j+1] == ' ') j++;
+				} else mAux.push_back(_ports[j]);
+			}
+			addPort(mAux);
+			mAux="";
+		}
 		void addPort(std::string _port) { Ports.push_back(_port); }
 		void setName(std::string _name) { Name = _name; }
 };
@@ -77,15 +90,15 @@ void print(std::vector<Container> _containers) {
 	printf(OUTPUT_FORMAT, "Name", "Status", "Ports");
 	std::cout << SEPARATOR << std::endl;
 	char *mFormat = new char[100];
-	for (int i = 0; i < (int)_containers.size(); i++) { 
+	for (int i = 0; i < (int)_containers.size(); i++) {
 		if ( _containers.at(i).getStatus().substr(0,6) == "Exited" ) strcpy(mFormat, OUTPUT_FORMAT_EXIT);
 		else strcpy(mFormat, OUTPUT_FORMAT_UP);
-		
+
 		printf(mFormat, _containers[i].getName().c_str(), _containers[i].getStatus().c_str(), _containers[i].getPorts()[1].c_str());
-		
-		for (int j = 2; j < _containers[i].getPortsCount(); j++) 
+
+		for (int j = 2; j < _containers[i].getPortsCount(); j++)
 			printf(mFormat, " ", " ", _containers[i].getPorts()[j].c_str());
-		
+
 		std::cout << SEPARATOR << std::endl;
 		std::cout << "\033[0m";
 	}
@@ -98,41 +111,39 @@ std::string exec(const char* _command) {
 	if ( !pipe ) throw std::runtime_error("popen() failed!");
 
 	while ( fgets(mBuff.data(), mBuff.size(), pipe.get()) != nullptr ) mResult += mBuff.data();
-	
+
 	return mResult;
 }
 
 int main(void) {
 	std::vector<Container> mContainers;
 	std::string mOutput = exec(COMMAND);
+	std::string mLine = "", mToken = "";
+	std::istringstream mOutputISS(mOutput);
 
-	while (std::getline(mFile, mLine)) {
-		if (mIndexes[6] != 0) {
-			std::string mID = trim ( mLine.substr(mIndexes[0], mIndexes[1] - mIndexes[0] ) );
-			std::string mImage = trim ( mLine.substr(mIndexes[1], mIndexes[2] - mIndexes[1] ) );
-			std::string mCommand = trim ( mLine.substr(mIndexes[2], mIndexes[3] - mIndexes[2] ) );
-			std::string mCreated = trim ( mLine.substr(mIndexes[3], mIndexes[4] - mIndexes[3] ) );
-			std::string mStatus = trim ( mLine.substr(mIndexes[4], mIndexes[5] - mIndexes[4] ) );
-			std::string mPorts = trim ( mLine.substr(mIndexes[5], mIndexes[6] - mIndexes[5] ) );
-			std::string mName = trim ( mLine.substr(mIndexes[6]) );
+	while ( std::getline(mOutputISS, mLine, '\n') ) {
+		Container mContainer;
+		std::istringstream mLineISS(mLine);
 
-			mContainers.push_back(Container(mID, mImage, mCommand, mCreated, mStatus, mPorts, mName));
-		} else {
-			int mSpaces = 0; // counts the number of continuous spaces
-			int mCount = 1; // keeps track of the position in the mIndexes vector
+		std::getline(mLineISS, mToken, '\t');
+		mContainer.setID(mToken);
+		std::getline(mLineISS, mToken, '\t');
+		mContainer.setImage(mToken);
+		std::getline(mLineISS, mToken, '\t');
+		mContainer.setCommand(mToken);
+		std::getline(mLineISS, mToken, '\t');
+		mContainer.setCreated(mToken);
+		std::getline(mLineISS, mToken, '\t');
+		mContainer.setStatus(mToken);
+		std::getline(mLineISS, mToken, '\t');
+		mContainer.setPorts(mToken);
+		std::getline(mLineISS, mToken, '\t');
+		mContainer.setName(mToken);
 
-			for (int i = 0; i < (int)mLine.size(); i++) {
-				if (mLine.at(i) == ' ') mSpaces++;
-				else mSpaces = 0;
-
-				if (mSpaces == 2) { // if there are 2 continuous spaces, then we reached the end of a column
-					while (mLine.at(i) == ' ') i++;
-					mIndexes[mCount++] = i;
-				}
-			}
-		}
+		mContainers.push_back(mContainer);
 	}
 
 	print(mContainers);
+
 	return 0;
 }

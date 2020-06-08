@@ -5,16 +5,22 @@ A simple C++ program to extract the information from `docker ps` and neatly disp
 
 Don't you just hate it when commands print their output with little to no regard of how it gets displayed in your terminal window? 
 
-Are you not sick of having to resize either the text or the terminal in order to fit long strings of text, that could have easily been arranged in a friendly looking table?
+Are you not sick of having to resize either the text or the terminal in order to fit long strings of characters, that could have easily been arranged in a friendly looking table?
 Wouldn't it be nice if that table was color coded, while we're at it?
 
 To put it in a single sentence: Are you tired of `docker ps` printing stuff like this to your console?
 
-<img width="597" alt="docker_ps" src="https://user-images.githubusercontent.com/28601784/83332212-a8495000-a2a2-11ea-997b-f3ea8cd8d978.png">
+<img width="602" alt="docker_ps" src="https://user-images.githubusercontent.com/28601784/83340452-ef563600-a2e0-11ea-90b8-47cc2a84de81.png">
 
 Well look no further! Docker-ps-parser is here to save your day. This program will take all that hard to read and poorly formatted data and slap it into a nice, 80 character wide table:
 
-<img width="596" alt="dps_example" src="https://user-images.githubusercontent.com/28601784/83330219-4be03380-a296-11ea-9085-316f8c30e77d.png">
+<img width="597" alt="dps_example" src="https://user-images.githubusercontent.com/28601784/83340455-f2512680-a2e0-11ea-81d8-42799dfbda6b.png">
+
+"But wait!", I hear you say, "Can't you kinda sorta already do that with ` docker ps --format "table {{.Names}}\\t{{.Image}}\\t{{.Status}}\\t{{.Ports}}"`?". And you would be right...nerd. However, the way it handles multiple ports is still kind of funky and if you have more than, say, 3 ports on a single container, well then, we're back to ground zero:
+
+<img width="604" alt="docker_ps_format_flaw" src="https://user-images.githubusercontent.com/28601784/83340454-f11ff980-a2e0-11ea-8a85-d7dd04e6daf6.png">
+
+Also, have you not seen the pretty colors in the table??
 
 <br>
 
@@ -32,7 +38,7 @@ function dps {
         /usr/local/src/docker-ps-parser/dps
 }
 ```
-5. Simply type `dps` and enjoy your pretty looking table
+5. Simply type `dps` into your terminal and enjoy your pretty looking table
 
 <br>
 

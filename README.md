@@ -31,12 +31,9 @@ sudo git clone https://github.com/mikeanth-dvlp/docker-ps-parser.git /usr/local/
 ```
 2. Navigate into the downloaded directory: `cd /usr/local/src/docker-ps-parser`
 3. Run `sudo make`
-4. Make the following addition to your `.bashrc` file:
+4. Make the following addition to your `.bash_aliases` file:
 ```
-function dps {
-        docker ps -a --no-trunc > /usr/local/src/docker-ps-parser/input.txt;
-        /usr/local/src/docker-ps-parser/dps
-}
+alias dps='/usr/local/src/docker-ps-parser/dps'
 ```
 5. Simply type `dps` into your terminal and enjoy your pretty looking table
 

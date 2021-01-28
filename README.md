@@ -33,18 +33,35 @@ Also, have you not seen the pretty colors in the table?? :heart_eyes:
 ### Download the precompiled binaries
 
 ``` bash
-wget https://github.com/mikeanth-dev/docker-ps-parser/releases/download/v1.0.0/dps
-chmod +x ./dps; # make the file executable
-sudo cp ./dps /bin/dps; # add it to path
+wget https://github.com/mikeanth-dev/docker-ps-parser/releases/download/v1.0.0/docker-ps-parser-x86_64
+chmod +x ./docker-ps-parser-x86_64; # make the file executable
+sudo cp ./docker-ps-parser-x86_64 /bin/dps; # add it to path
 ```
+
+### Automated install via Ansible
+
+You can use an automation tool, like Ansible to script out this installation.   
+In your playbook/role, you can simply add the following task, and Ansible will take care of it for you!
+
+``` yaml
+...
+- name: Download dps v1.0.0
+  become: true
+  get_url:
+    url: 'https://github.com/mikeanth-dev/docker-ps-parser/releases/download/v1.0.0/docker-ps-parser-{{ ansible_architecture }}'
+    dest: '/bin/dps'
+    mode: '0755'
+    owner: root
+    group: root
+...
+```
+
+> Note: The arch in the release name matches the ansible `{{ ansible_architecture }}` for all supported architectures.
+
 
 ### Build from source
 
-Prerequisites:
-
-- g++
-- make
-
+Prerequisites: `g++` & `make`.  
 Clone this repository and compile the project via the makefile:
 
 ``` bash

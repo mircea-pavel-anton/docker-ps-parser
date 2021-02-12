@@ -28,53 +28,10 @@ Well look no further! Docker-ps-parser is here to save your day. This program wi
 
 Also, have you not seen the pretty colors in the table?? :heart_eyes:
 
-## How to install
+## How to setup
 
-### Download the precompiled binaries
-
-``` bash
-wget https://github.com/mikeanth-dev/docker-ps-parser/releases/download/v1.0.0/docker-ps-parser-x86_64
-chmod +x ./docker-ps-parser-x86_64; # make the file executable
-sudo cp ./docker-ps-parser-x86_64 /bin/dps; # add it to path
-```
-
-### Automated install via Ansible
-
-You can use an automation tool, like Ansible to script out this installation.   
-In your playbook/role, you can simply add the following task, and Ansible will take care of it for you!
-
-``` yaml
-...
-- name: Download dps v1.0.0
-  become: true
-  get_url:
-    url: 'https://github.com/mikeanth-dev/docker-ps-parser/releases/download/v1.0.0/docker-ps-parser-{{ ansible_architecture }}'
-    dest: '/bin/dps'
-    mode: '0755'
-    owner: root
-    group: root
-...
-```
-
-> Note: The arch in the release name matches the ansible `{{ ansible_architecture }}` for all supported architectures.
-
-
-### Build from source
-
-Prerequisites: `g++` & `make`.  
-Clone this repository and compile the project via the makefile:
-
-``` bash
-git clone https://github.com/mikeanth-dvlp/docker-ps-parser.git;
-cd docker-ps-parser;
-make;
-```
-
-You should now have a new file called `dps` in that directory. You can execute it by running `./dps`. However, it would be more convenient to have it readily available at all times, so i recommend copying it to `/bin/` via : `sudo cp ./dps /bin/dps`.
-
-## How to uninstall
-
-Assuming you follwed the steps mentioned above, simply remove the binary you copied to `/bin` by `sudo rm /bin/dps`.
+Check out the [releases page](https://github.com/mikeanth-dev/docker-ps-parser/releases) for precompiled binaries.  
+See the [wiki](https://github.com/mikeanth-dev/docker-ps-parser/wiki) for more detailed steps.  
 
 ## Feedback, suggestions and help
 

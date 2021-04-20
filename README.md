@@ -1,9 +1,9 @@
+# docker-ps-parser
 
 ![GitHub](https://img.shields.io/github/license/mikeanth-dev/docker-ps-parser?style=for-the-badge)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/mikeanth-dev/docker-ps-parser?style=for-the-badge)
 ![GitHub top language](https://img.shields.io/github/languages/top/mikeanth-dev/docker-ps-parser?style=for-the-badge)
-
-# docker-ps-parser
+![Build status](https://img.shields.io/gitlab/pipeline/mikeanth-dev/docker-ps-parser/master?style=for-the-badge)
 
 A simple C++ program to extract the information from `docker ps` and neatly display it in a 80 character wide terminal.
 

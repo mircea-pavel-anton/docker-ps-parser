@@ -1,4 +1,5 @@
-name: Build
+---
+name: Build and Run
 
 on:
   push:
@@ -8,12 +9,13 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Build
       run: make build
+
     - name: Run
       run: make execute

@@ -17,13 +17,12 @@ jobs:
     - name: Build
       run: |
         make build
-        mkdir /artifacts
-        cp dps /artifacts/dps-ubuntu2004_amd64
+        cp dps dps-ubuntu2004_amd64
 
     - name: Add compiled binary to release
       uses: AButler/upload-release-assets@v2.0
       with:
-        files: 'artifacts/*'
+        files: 'dps-ubuntu2004_amd64'
         repo-token: ${{ secrets.GITHUB_TOKEN }}
 
   build-on-other:
